@@ -22,7 +22,7 @@ impl Vector {
     pub fn add(&self, v: &Vector) -> Vector {
         check_dimension(self, &v);
 
-        let x: Vec<f64> = self
+        let added_entries: Vec<f64> = self
             .entries
             .iter()
             .zip(v.entries.iter())
@@ -31,7 +31,7 @@ impl Vector {
 
         Vector {
             dimension: self.dimension.clone(),
-            entries: x,
+            entries: added_entries,
         }
     }
 
