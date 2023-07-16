@@ -7,11 +7,19 @@ pub struct Vector {
 
 fn check_dimension(v: &Vector, w: &Vector) {
     if v.dimension != w.dimension {
-        panic!("Attempt to add vector of different dimension {} vs {}.", v.dimension, w.dimension)
+        panic!("Attempt to add vectors of different dimensions: {} vs {}.", v.dimension, w.dimension)
     }
 }
 
 impl Vector {
+    pub fn zeros(dimension: usize) -> Self {
+        Vector {
+            dimension: dimension,
+            entries: vec![0.0; dimension]
+        }
+    }
+
+
     pub fn new(entries: Vec<f64>) -> Self {
         Vector {
             dimension: entries.len(),
