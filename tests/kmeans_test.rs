@@ -1,6 +1,7 @@
 use proptest::prelude::*;
 use core::cmp::min;
 use kmeans::Vector;
+mod custom_strategies;
 
 #[test]
 fn test_entries() {
@@ -16,24 +17,14 @@ fn test_zeros() {
 
 proptest! {
     #[test]
-    fn test_add_zero_element(mut v_input in any::<Vec<f64>>()) {
-        let zero = Vector::zeros(v_input.len());
-        let v = Vector::new(v_input);
+    fn test_add_zero_element(v in custom_strategies::generate_vectors()) {
+        let zero = Vector::zeros(v.dimension);
 
         assert_eq!(v.add(&zero).entries, v.entries);
     }
 
     #[test]
-    fn test_add_commutative(mut v_input in any::<Vec<f64>>(), mut w_input in any::<Vec<f64>>()) {
-        prop_assume!(!v_input.is_empty());
-        prop_assume!(!w_input.is_empty());
-
-        let min_length = min(v_input.len(), w_input.len());
-        v_input.truncate(min_length);
-        w_input.truncate(min_length);
-
-        let v = Vector::new(v_input);
-        let w = Vector::new(w_input);
+    fn test_add_commutative((v, w) in custom_strategies::generate_vector_pairs()) {
 
         assert_eq!(v.add(&w).entries, w.add(&v).entries);
     }
