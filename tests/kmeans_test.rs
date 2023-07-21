@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate approx;
+
 use proptest::prelude::*;
 use kmeans::Vector;
 use kmeans::Operations;
@@ -20,12 +23,19 @@ proptest! {
     fn test_add_zero_element(v in custom_strategies::generate_vectors()) {
         let zero = Vector::zeros(v.dimension);
 
-        assert_eq!(v.add(&zero).entries, v.entries);
+        assert_relative_eq!(v.add(&zero), v);
+    }
+
+    #[test]
+    fn test_add_inverse_element(v in custom_strategies::generate_vectors()) {
+        let inverse = v.scale(-1.0);
+        let zero = Vector::zeros(v.dimension);
+
+        assert_abs_diff_eq!(v.add(&inverse), zero);
     }
 
     #[test]
     fn test_add_commutative((v, w) in custom_strategies::generate_vector_pairs()) {
-
-        assert_eq!(v.add(&w).entries, w.add(&v).entries);
+        assert_abs_diff_eq!(v.add(&w), w.add(&v));
     }
 }

@@ -18,3 +18,7 @@ prop_compose! {
 prop_compose! {
     pub fn generate_vector_pairs()(d in any::<u8>())(v in generate_vector(d as usize), w in generate_vector(d as usize)) -> (Vector, Vector) { (v,w) }
 }
+
+prop_compose! {
+    pub fn generate_vector_triples()(d in any::<u8>())(u in generate_vector(d as usize), v in generate_vector(d as usize), w in generate_vector(d as usize)) -> (Vector, Vector, Vector) { (u, v,w) }
+}
