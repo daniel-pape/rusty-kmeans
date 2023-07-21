@@ -1,6 +1,6 @@
 use proptest::prelude::*;
-use core::cmp::min;
 use kmeans::Vector;
+use kmeans::Operations;
 mod custom_strategies;
 
 #[test]
