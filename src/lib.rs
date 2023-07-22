@@ -59,10 +59,10 @@ pub trait Operations {
     fn dot(&self, other: &Vector) -> f64;
 }
 
-fn check_dimension(v: &Vector, w: &Vector) {
+pub fn check_dimension(v: &Vector, w: &Vector) {
     if v.dimension != w.dimension {
         panic!(
-            "Attempt to add vectors of different dimensions: {} vs {}.",
+            "Attempt to perform binary operation on vectors of different dimensions: {} vs {}.",
             v.dimension, w.dimension
         )
     }

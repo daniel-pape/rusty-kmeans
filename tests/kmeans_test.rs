@@ -2,9 +2,15 @@
 extern crate approx;
 
 use proptest::prelude::*;
-use kmeans::Vector;
+use kmeans::{Vector, check_dimension};
 use kmeans::Operations;
 mod custom_strategies;
+
+#[test]
+#[should_panic]
+fn test_check_dimension() {
+   check_dimension(&Vector::zeros(1), &Vector::zeros(2));
+}
 
 #[test]
 fn test_entries() {
