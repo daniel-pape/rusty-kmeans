@@ -1,7 +1,7 @@
 use proptest::prelude::*;
 
 use kmeans::squared_distance;
-use kmeans::Vector;
+use kmeans::vector::Vector;
 mod custom_strategies;
 
 

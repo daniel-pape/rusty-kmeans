@@ -1,6 +1,6 @@
 use proptest::prelude::*;
 
-use kmeans::Vector;
+use kmeans::vector::Vector;
 
 
 
