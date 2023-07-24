@@ -119,4 +119,19 @@ impl Vector {
             entries: entries,
         }
     }
+
+    pub fn compute_average(vectors: Vec<&Vector>) -> Vector {
+        // TODO: Don't get dimension by drawing!
+        let d = vectors[0].dimension;
+        let sum = vectors.iter().fold(Vector::zeros(d), |sum, w| sum.add(w));
+        let cardinality = vectors.len() as f64;
+        let inverse_cardinality = 1.0 / cardinality;
+    
+        sum.scale(inverse_cardinality)
+    }
+
+    pub fn squared_distance(v: &Vector, w: &Vector) -> f64 {
+        let difference = v.add(&w.scale(-1.0));
+        difference.dot(&difference)
+    }
 }
