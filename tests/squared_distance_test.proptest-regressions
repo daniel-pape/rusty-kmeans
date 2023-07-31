@@ -1,0 +1,10 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 98ace7bf476915adada82f932380a52c9da2430dc1f864923ea5778a5fda964a # shrinks to input = []
+cc 92752cbe800690050260570593e4d04d1869e7554494501d1982ea4adbf95ecb # shrinks to v_input = [0.0], w_input = [0.0]
+cc d3f378c95646e9b754e5fa2cb0f114a52ce18aa8ffab9ea54860290c217e6def # shrinks to v = Vector { dimension: 0, entries: [] }
+cc 9d2eb9f9966b8f211cabf55b0330849b594016a81611f42b0d777313a94a604b # shrinks to (v, w) = (Vector { dimension: 0, entries: [] }, Vector { dimension: 0, entries: [] })
