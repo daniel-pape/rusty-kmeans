@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use std::f64;
+use std::{f64, vec};
 
 pub mod vector;
 
@@ -7,9 +7,11 @@ use vector::Vector;
 
 type VectorId = u8;
 type ClusterId = u8;
+
+#[derive(Debug, PartialEq)]
 pub struct Centroid {
-    centroid_id: u8,
-    value: Vector,
+    pub centroid_id: u8,
+    pub value: Vector,
 }
 
 pub struct Clustering {
@@ -18,25 +20,17 @@ pub struct Clustering {
     assignment: HashMap<VectorId, ClusterId>,
 }
 
-pub fn compute_distances<'a>(
-    v: &'a Vector,
-    centroids: &'a Vec<Centroid>,
-) -> Vec<(f64, &'a Centroid)> {
-    return centroids
-        .iter()
-        .map(|c| (Vector::squared_distance(v, &c.value), c))
-        .collect();
-}
-
+/// Find the centroid nearest to `v` in terms of (standard) distance.
 pub fn find_nearest_centroid<'a>(
     v: &'a Vector,
     centroids: &'a Vec<Centroid>,
 ) -> Option<&'a Centroid> {
-    // test: should only be None iff centroids is empty
-    compute_distances(v, &centroids)
-        .iter()
-        .min_by(|x, y: &&(f64, &Centroid)| x.0.total_cmp(&y.0))
-        .map(|x| x.1)
+    centroids.iter().min_by(|first_centroid, second_centorid| {
+        let x = Vector::squared_distance(&first_centroid.value, v);
+        let y = Vector::squared_distance(&second_centorid.value, v);
+
+        x.total_cmp(&y)
+    })
 }
 
 impl Clustering {
@@ -67,12 +61,30 @@ impl Clustering {
                 .map(|vector_id| &dataset[vector_id])
                 .collect::<Vec<&Vector>>();
 
-            updated_centroids.push(Centroid {
+            let a = Vector::compute_average(&current_cluster);
+            let x = Centroid {
                 centroid_id: current_cluster_id,
-                value: Vector::compute_average(current_cluster),
-            })
+                value: a,
+            };
+
+            updated_centroids.push(x);
         }
 
         self.centroids = updated_centroids;
     }
 }
+
+// pub fn run(k: u8, dataset: HashMap<VectorId, Vector>) {
+//     let clustering = Clustering {
+//         k: k,
+//         assignment: HashMap::new(),
+//         centroids: vec![],
+//     };
+
+//     let is_divergent = true;
+
+//     while is_divergent {
+//         clustering.update_assignment(dataset);
+//         clustering.update_centroids(&dataset)
+//     }
+// }
