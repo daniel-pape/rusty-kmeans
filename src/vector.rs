@@ -1,9 +1,24 @@
 use approx::{AbsDiffEq, RelativeEq, UlpsEq};
+use serde::Serializer;
+use serde::ser::SerializeSeq;
+use serde::Serialize;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Vector {
     pub dimension: usize,
     pub entries: Vec<f64>,
+}
+
+impl Serialize for Vector {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
+        let mut seq = serializer.serialize_seq(Some(self.dimension))?;
+
+        for e in self.entries.iter() {
+            seq.serialize_element::<f64>(e)?
+        }
+
+        seq.end()
+    }
 }
 
 impl AbsDiffEq for Vector {
