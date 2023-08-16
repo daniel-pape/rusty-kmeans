@@ -27,3 +27,5 @@ impl<T: ClusteringWriter> Writer for T {
         Ok(())
     }
 }
+
+

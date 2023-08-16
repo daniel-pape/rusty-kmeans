@@ -7,7 +7,7 @@ use std::error::Error;
 use serde::Serialize;
 
 use kmeans::compute;
-use kmeans::io::Writer;
+use kmeans::writer::Writer;
 use kmeans::vector::Vector;
 
 #[derive(Debug, Serialize)]

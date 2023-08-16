@@ -8,12 +8,12 @@ use std::path::PathBuf;
 use csv::WriterBuilder;
 
 pub use centroid::Centroid;
-use io::ClusteringWriter;
+use writer::ClusteringWriter;
 use vector::Vector;
 
 pub mod vector;
 pub mod centroid;
-pub mod io;
+pub mod writer;
 
 type VectorId = u8;
 type ClusterId = u8;
