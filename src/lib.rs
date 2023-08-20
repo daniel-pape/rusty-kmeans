@@ -16,11 +16,11 @@ pub mod centroid;
 pub mod writer;
 pub mod reader;
 
-type VectorId = u8;
-type ClusterId = u8;
+type VectorId = usize;
+type ClusterId = usize;
 
 pub struct Clustering {
-    pub k: u8,
+    pub k: usize,
     pub centroids: Vec<Centroid>,
     pub assignment: HashMap<VectorId, ClusterId>,
 }
@@ -49,12 +49,12 @@ impl Clustering {
         }
     }
 
-    fn get_assigned_vector_ids(&self, cluster_id: u8) -> Vec<u8> {
+    fn get_assigned_vector_ids(&self, cluster_id: usize) -> Vec<usize> {
         self.assignment
             .iter()
             .filter(|(_, a_cluster_id)| **a_cluster_id == cluster_id)
             .map(|(vector_id, _)| *vector_id)
-            .collect::<Vec<u8>>()
+            .collect::<Vec<usize>>()
     }
 
     pub fn update_centroids(&mut self, dataset: &HashMap<VectorId, Vector>) {
@@ -85,7 +85,7 @@ impl Clustering {
             < eps
     }
 
-    pub fn compute(k: u8, dataset: HashMap<VectorId, Vector>, eps: f64) -> Clustering {
+    pub fn compute(k: usize, dataset: HashMap<VectorId, Vector>, eps: f64) -> Clustering {
         let mut clustering = Clustering {
             k,
             assignment: HashMap::new(),
@@ -94,7 +94,7 @@ impl Clustering {
                 .take(k as usize)
                 .enumerate()
                 .map(|(i, v)| Centroid {
-                    centroid_id: i as u8,
+                    centroid_id: i,
                     value: v.clone(),
                 })
                 .collect(),

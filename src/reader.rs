@@ -6,7 +6,7 @@ use csv::ReaderBuilder;
 
 use crate::vector::Vector;
 
-pub type DataSet = HashMap<u8, Vector>;
+pub type DataSet = HashMap<usize, Vector>;
 
 pub trait CsvReader {
     fn read(path_to_file: PathBuf) -> Result<DataSet, Box<dyn Error>>;
@@ -19,7 +19,7 @@ impl CsvReader for DataSet {
             .has_headers(false)
             .from_reader(csv_file);
         let enumerated_results = reader.records().into_iter().enumerate();
-        let mut dataset: HashMap<u8, Vector> = HashMap::new();
+        let mut dataset = DataSet::new();
 
         for (row_idx, result) in enumerated_results {
             let record = result?;
@@ -36,7 +36,7 @@ impl CsvReader for DataSet {
                 entries,
             };
 
-            dataset.insert(row_idx as u8, v);
+            dataset.insert(row_idx, v);
         }
 
         Ok(dataset)

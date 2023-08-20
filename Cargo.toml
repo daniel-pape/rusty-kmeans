@@ -9,6 +9,7 @@ edition = "2021"
 approx = "0.5.1"
 csv = "1.2.2"
 serde = { version = "1.0.183", features = ["derive"] }
+structopt = "0.3.26"
 
 [dev-dependencies]
 proptest = "1.0"

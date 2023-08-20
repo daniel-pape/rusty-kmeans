@@ -4,7 +4,7 @@ use crate::vector::Vector;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Centroid {
-    pub centroid_id: u8,
+    pub centroid_id: usize,
     pub value: Vector,
 }
 
