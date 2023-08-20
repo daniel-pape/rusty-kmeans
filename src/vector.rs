@@ -5,13 +5,13 @@ use serde::Serialize;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Vector {
-    pub dimension: usize,
+    pub size: usize,
     pub entries: Vec<f64>,
 }
 
 impl Serialize for Vector {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: Serializer {
-        let mut seq = serializer.serialize_seq(Some(self.dimension))?;
+        let mut seq = serializer.serialize_seq(Some(self.size))?;
 
         for e in self.entries.iter() {
             seq.serialize_element::<f64>(e)?
@@ -74,10 +74,10 @@ pub trait Operations {
 }
 
 pub fn check_dimension(v: &Vector, w: &Vector) {
-    if v.dimension != w.dimension {
+    if v.size != w.size {
         panic!(
             "Attempt to perform binary operation on vectors of different dimensions: {} vs {}.",
-            v.dimension, w.dimension
+            v.size, w.size
         )
     }
 }
@@ -94,14 +94,14 @@ impl Operations for Vector {
             .collect::<Vec<f64>>();
 
         Vector {
-            dimension: self.dimension.clone(),
+            size: self.size.clone(),
             entries: added_entries,
         }
     }
 
     fn scale(&self, factor: f64) -> Vector {
         Vector {
-            dimension: self.dimension.clone(),
+            size: self.size.clone(),
             entries: self
                 .entries
                 .iter()
@@ -122,21 +122,21 @@ impl Operations for Vector {
 impl Vector {
     pub fn zeros(dimension: usize) -> Self {
         Vector {
-            dimension: dimension,
+            size: dimension,
             entries: vec![0.0; dimension],
         }
     }
 
     pub fn new(entries: Vec<f64>) -> Self {
         Vector {
-            dimension: entries.len(),
+            size: entries.len(),
             entries: entries,
         }
     }
 
     pub fn compute_average(vectors: &Vec<&Vector>) -> Vector {
         // TODO: Don't get dimension by drawing!
-        let d = vectors[0].dimension;
+        let d = vectors[0].size;
         let sum = vectors.iter().fold(Vector::zeros(d), |sum, w| sum.add(w));
         let cardinality = vectors.len() as f64;
         let inverse_cardinality = 1.0 / cardinality;

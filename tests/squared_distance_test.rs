@@ -22,7 +22,7 @@ proptest! {
     /// zero vector must equal the sum of squares of its entries.
     #[test]
     fn test_squared_distance_to_zero(v in custom_strategies::generate_vectors()) {
-        let zero: Vector = Vector::zeros(v.dimension);
+        let zero: Vector = Vector::zeros(v.size);
         let squared_sum = v.entries.iter().map(|x| {x * x}).sum::<f64>();
         assert_eq!(Vector::squared_distance(&v,&zero), squared_sum );
     }

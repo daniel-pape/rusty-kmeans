@@ -32,7 +32,7 @@ impl CsvReader for DataSet {
             }
 
             let v = Vector {
-                dimension: len_record,
+                size: len_record,
                 entries,
             };
 

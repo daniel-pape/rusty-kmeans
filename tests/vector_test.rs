@@ -28,7 +28,7 @@ fn test_zeros() {
 proptest! {
     #[test]
     fn test_add_zero_element(v in custom_strategies::generate_vectors()) {
-        let zero = Vector::zeros(v.dimension);
+        let zero = Vector::zeros(v.size);
 
         assert_relative_eq!(v.add(&zero), v);
     }
@@ -36,7 +36,7 @@ proptest! {
     #[test]
     fn test_add_inverse_element(v in custom_strategies::generate_vectors()) {
         let inverse = v.scale(-1.0);
-        let zero = Vector::zeros(v.dimension);
+        let zero = Vector::zeros(v.size);
 
         assert_abs_diff_eq!(v.add(&inverse), zero);
     }

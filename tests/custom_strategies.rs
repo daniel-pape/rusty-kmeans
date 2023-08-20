@@ -6,7 +6,7 @@ use kmeans::vector::Vector;
 
 pub fn generate_vector(dimension: usize) -> impl Strategy<Value = Vector> {
     prop::collection::vec(any::<f64>(), dimension as usize).prop_map(move |v| Vector {
-        dimension: dimension,
+        size: dimension,
         entries: v,
     })
 }
