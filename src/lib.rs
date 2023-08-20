@@ -8,12 +8,13 @@ use std::path::PathBuf;
 use csv::WriterBuilder;
 
 pub use centroid::Centroid;
-use writer::ClusteringWriter;
 use vector::Vector;
+use writer::ClusteringWriter;
 
 pub mod vector;
 pub mod centroid;
 pub mod writer;
+pub mod reader;
 
 type VectorId = u8;
 type ClusterId = u8;
@@ -83,38 +84,38 @@ impl Clustering {
             .sum::<f64>()
             < eps
     }
-}
 
-pub fn compute(k: u8, dataset: HashMap<VectorId, Vector>, eps: f64) -> Clustering {
-    let mut clustering = Clustering {
-        k,
-        assignment: HashMap::new(),
-        centroids: dataset
-            .values()
-            .take(k as usize)
-            .enumerate()
-            .map(|(i, v)| Centroid {
-                centroid_id: i as u8,
-                value: v.clone(),
-            })
-            .collect(),
-    };
+    pub fn compute(k: u8, dataset: HashMap<VectorId, Vector>, eps: f64) -> Clustering {
+        let mut clustering = Clustering {
+            k,
+            assignment: HashMap::new(),
+            centroids: dataset
+                .values()
+                .take(k as usize)
+                .enumerate()
+                .map(|(i, v)| Centroid {
+                    centroid_id: i as u8,
+                    value: v.clone(),
+                })
+                .collect(),
+        };
 
-    loop {
-        let previous_centroids: Vec<Centroid> = clustering.centroids.clone();
-        println!("Iteration centroids: {:?}", previous_centroids);
+        loop {
+            let previous_centroids: Vec<Centroid> = clustering.centroids.clone();
 
-        clustering.update_assignment(&dataset);
-        clustering.update_centroids(&dataset);
+            clustering.update_assignment(&dataset);
+            clustering.update_centroids(&dataset);
 
-        if clustering.is_convergent(previous_centroids, eps) {
-            println!("Clustering is convergent.");
-            break;
+            if clustering.is_convergent(previous_centroids, eps) {
+                println!("Clustering is convergent.");
+                break;
+            }
         }
-    }
 
-    clustering
+        clustering
+    }
 }
+
 
 impl ClusteringWriter for Clustering {
     fn write_centroids(&self, output_path: PathBuf) -> Result<(), Error> {

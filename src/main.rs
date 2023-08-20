@@ -3,35 +3,22 @@ extern crate csv;
 use std::collections::HashMap;
 use std::env;
 use std::error::Error;
+use std::path::PathBuf;
+use std::str::FromStr;
 
-use serde::Serialize;
-
-use kmeans::compute;
-use kmeans::writer::Writer;
+use kmeans::Clustering;
+use kmeans::reader::{CsvReader, DataSet};
 use kmeans::vector::Vector;
-
-#[derive(Debug, Serialize)]
-struct Person {
-    name: String,
-    age: u32,
-}
+use kmeans::writer::Writer;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let clustering = compute(
-        3,
-        HashMap::from([
-            (1, Vector::new(vec![0.0])),
-            (2, Vector::new(vec![1.0])),
-            (3, Vector::new(vec![2.0])),
-        ]),
-        0.2,
-    );
-
+    let input_csv_path = PathBuf::from_str("/Users/dev/projects/rust/points/src/points/cluster_data.csv")?;
     let output_dir_path = env::current_dir()?.as_path().join("output");
-    match clustering.write(output_dir_path) {
-        Ok(_) => {}
-        Err(error) => panic!("{}", error)
-    }
+
+    let dataset: HashMap<u8, Vector> = DataSet::read(input_csv_path)?;
+    let clustering = Clustering::compute(3, dataset, 0.2);
+
+    clustering.write(output_dir_path)?;
 
     Ok(())
 }
